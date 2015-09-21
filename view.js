@@ -9,6 +9,4 @@ function process(code) {
 	tokens = TokenString(code)
 	ast = ParseTokens(tokens)
 	console.log(JSON.stringify(tokens))
-
-
 }
