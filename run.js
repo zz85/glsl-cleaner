@@ -28,7 +28,6 @@ ajax('vs.glsl', function(r) {
 });
 
 var glsl_container;
-var types = {};
 
 function startParsing(code) {
 	try {
@@ -41,8 +40,6 @@ function startParsing(code) {
 		document.body.appendChild(glsl_container);
 
 		tokenHighlighter(tokens);
-
-		console.log(Object.keys(types));
 
 		ast = parse(tokens);
 	} catch (e) {
@@ -61,7 +58,6 @@ function tokenHighlighter(tokens) {
 function eatToken(token) {
 	span = document.createElement('span');
 	span.className = 'token ' + token.type;
-	types[token.type] = 1;
 	span.textContent = token.data;
 	glsl_container.appendChild(span);
 
