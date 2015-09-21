@@ -31,19 +31,27 @@ var glsl_container;
 var types = {};
 
 function startParsing(code) {
-	tokens = tokenize(code);
-	// console.log(code.length, tokens.length);
+	try {
+		tokens = tokenize(code);
+		// console.log(code.length, tokens.length);
 
-	if (glsl_container) glsl_container.parentNode.removeChild(glsl_container)
-	glsl_container = document.createElement('pre');
-	glsl_container.id = 'glsl_container';
-	document.body.appendChild(glsl_container);
+		if (glsl_container) glsl_container.parentNode.removeChild(glsl_container)
+		glsl_container = document.createElement('pre');
+		glsl_container.id = 'glsl_container';
+		document.body.appendChild(glsl_container);
 
-	tokenHighlighter(tokens);
+		tokenHighlighter(tokens);
 
-	console.log(Object.keys(types));
+		console.log(Object.keys(types));
 
-	ast = parse(tokens);
+		ast = parse(tokens);
+	} catch (e) {
+		debug.innerHTML = 'Error Parsing GLSL Code! ' + e;
+		return e;
+	}
+
+	debug.innerHTML = '';
+
 }
 
 function tokenHighlighter(tokens) {
