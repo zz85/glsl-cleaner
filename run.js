@@ -11,6 +11,8 @@ function ajax(url, callback) {
 	oReq.send();
 }
 
+var SHOW_LINE_BREAKS = true;
+
 ajax('vs.glsl', function(r) {
 	// console.log('got', r);
 	source.textContent = r;
@@ -22,19 +24,31 @@ ajax('vs.glsl', function(r) {
 	document.body.appendChild(glsl_container);
 
 	tokenHighlighter(tokens);
+
+	console.log(Object.keys(types));
 });
 
 function tokenHighlighter(tokens) {
 	tokens.forEach(eatToken)
 }
+
+var types = {
+
+};
+
 function eatToken(token) {
 	console.log(token);
 	span = document.createElement('span');
-	span.className = 'token';
+	span.className = 'token ' + token.type;
+	types[token.type] = 1;
 	span.textContent = token.data;
 	glsl_container.appendChild(span);
 
-	if (token.data.match(/\n+/g)) {
+	if (SHOW_LINE_BREAKS && token.data.match(/\n+/g)) {
 		span.innerHTML = token.data.replace(/\n/g, '↵\n');
+	}
+
+	span.onclick = function() {
+		console.log(token);
 	}
 }

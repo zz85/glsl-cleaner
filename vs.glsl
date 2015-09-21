@@ -1,3 +1,10 @@
+// This is a comment
+
+/*
+ This is a block comment
+
+*/
+
 precision highp float;
 precision highp int;
 #define SHADER_NAME ShaderMaterial

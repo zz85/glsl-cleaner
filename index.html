@@ -5,7 +5,7 @@
 <body>
 <style>
 body {
-	font-family: monospace;
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
 	font-size: 12px;
 }
 
@@ -14,6 +14,7 @@ textarea {
 	padding: 20px;
 	height: 400px;
 	font-size: 14px;
+	font-family: monospace;
 	background: #333333;
 	color: #dddddd;
 	display: block;
@@ -27,15 +28,72 @@ textarea {
 	overflow: auto;
 	width: 100%;
 	height: 400px;
-	padding: 0;
+	padding: 20px;
 	font-size: 14px;
 	position: absolute;
 	display: block;
+
+	white-space: pre;
+	text-align: left;
+	direction: ltr;
+	word-wrap: normal;
+	line-height: 1.2;
+	cursor: text;
 }
 
 .token {
+	box-sizing: border-box;
 	color: #eeeeee;
 	white-space: pre;
+
+	cursor: pointer;
+}
+
+.token:hover {
+	font-weight: bold;
+	border: 1px solid #444;
+	text-shadow: 0 -.1em .2em #333;
+}
+
+.keyword {
+	color: #66d9ef;
+}
+
+.whitespace {
+	/*border-bottom: 1px solid #999;*/
+	color: #999;
+}
+
+.operator {
+	color: #f92672;
+}
+
+.preprocessor {
+	color: #75715e;
+}
+
+.ident {
+	color: #f8f8f2;
+}
+
+.float {
+	color: #ae81ff;
+}
+
+.line-comment {
+
+}
+
+.block-comment {
+
+}
+
+.builtin {
+
+}
+
+.eof {
+
 }
 
 </style>
@@ -44,6 +102,8 @@ textarea {
 	<script src="b.js"></script>
 	<script src="run.js"></script>
 	<br/>
+	<br/>
+
 
 </body>
 </html>
