@@ -90,15 +90,17 @@ function walker(ast) {
 	a.onclick = function() {
 		var token_index = tokens.indexOf(ast.token);
 		if (token_index > -1) {
-
 			if (highlighted) highlighted.classList.remove('highlight');
 			highlighted = token_to_dom[token_index];
 			highlighted.classList.add('highlight');
+
+			// highlighted.parentNode.scrollTop = (ast.token.line * 12) + 'px';
+			highlighted.scrollIntoView({behavior: "smooth"}); // block: "end",
 		} else {
 			console.log('token not found');
 		}
 
-		console.log('ast', ast, ast.token);
+		console.log('ast', ast);
 		return false;
 	}
 
