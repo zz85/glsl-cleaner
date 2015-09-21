@@ -1,0 +1,17 @@
+{
+  "name": "glsl-cleaner",
+  "version": "1.0.0",
+  "description": "GLSL Shaker / Clean / Pruner / Code Code Eliminator",
+  "main": "glslprep.js",
+  "scripts": {
+    "b": "browserify view.js -o b.js",
+    "w": "watchify view.js -o b.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+
+  },
+  "author": "Joshua Koo (zz85nus@gmail.com)",
+  "license": "MIT",
+  "dependencies": {
+    "glsl-parser": "file:glsl-parser"
+  }
+}
