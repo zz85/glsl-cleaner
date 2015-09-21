@@ -29,6 +29,7 @@ ajax('vs.glsl', function(r) {
 
 var glsl_container;
 var token_to_dom = [];
+var highlighted;
 
 function startParsing(code) {
 	try {
@@ -50,7 +51,7 @@ function startParsing(code) {
 
 	debug.innerHTML = '';
 
-	tree.innerHTML = '';
+	tree.innerHTML = 'Ast:\n';
 	walker(ast);
 
 }
@@ -78,6 +79,7 @@ function eatToken(token) {
 }
 
 var level = 0;
+
 function walker(ast) {
 	level++;
 	tree.appendChild(document.createTextNode(new Array(level).join('|') + '- '));
@@ -86,9 +88,17 @@ function walker(ast) {
 	a.innerHTML = ast.type + '\n';
 	a.href = '#';
 	a.onclick = function() {
-		console.log('hi', ast, ast.token, tokens.indexOf(ast.token));
+		var token_index = tokens.indexOf(ast.token);
+		if (token_index > -1) {
 
+			if (highlighted) highlighted.classList.remove('highlight');
+			highlighted = token_to_dom[token_index];
+			highlighted.classList.add('highlight');
+		} else {
+			console.log('token not found');
+		}
 
+		console.log('ast', ast, ast.token);
 		return false;
 	}
 
@@ -96,6 +106,7 @@ function walker(ast) {
 
 	ast.children.forEach(walker);
 	level--;
+
 	// stmtlist - has multiple statements/ preprocessor
 	// stmt
 	// struct
