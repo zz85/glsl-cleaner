@@ -17,7 +17,7 @@ ajax('vs.glsl', function(r) {
 	tokens = tokenize(r);
 	console.log(tokens);
 
-	var glsl_container = document.createElement('div');
+	var glsl_container = document.createElement('pre');
 	glsl_container.id = 'glsl_container';
 	document.body.appendChild(glsl_container);
 
@@ -34,10 +34,7 @@ function eatToken(token) {
 	span.textContent = token.data;
 	glsl_container.appendChild(span);
 
-	// token === '\n'
 	if (token.data.match(/\n+/g)) {
-		span.textContent = token.data.replace(/\n/g, '↵');
-		console.log('new line')
-		glsl_container.appendChild(document.createElement('br'));
+		span.innerHTML = token.data.replace(/\n/g, '↵\n');
 	}
 }
