@@ -14,12 +14,10 @@ function ajax(url, callback) {
 var SHOW_LINE_BREAKS = true;
 
 source.onchange = function() {
-	console.log('onchange')
 	startParsing(source.value);
 };
 
 source.onkeyup = function() {
-	console.log('onkeyup')
 	startParsing(source.value);
 };
 
@@ -29,12 +27,12 @@ ajax('vs.glsl', function(r) {
 	startParsing(r)
 });
 
-
 var glsl_container;
+var types = {};
 
 function startParsing(code) {
 	tokens = tokenize(code);
-	console.log(code.length, tokens.length);
+	// console.log(code.length, tokens.length);
 
 	if (glsl_container) glsl_container.parentNode.removeChild(glsl_container)
 	glsl_container = document.createElement('pre');
@@ -43,19 +41,16 @@ function startParsing(code) {
 
 	tokenHighlighter(tokens);
 
-	// console.log(Object.keys(types));
+	console.log(Object.keys(types));
+
+	ast = parse(tokens);
 }
 
 function tokenHighlighter(tokens) {
 	tokens.forEach(eatToken)
 }
 
-var types = {
-
-};
-
 function eatToken(token) {
-	// console.log(token);
 	span = document.createElement('span');
 	span.className = 'token ' + token.type;
 	types[token.type] = 1;
