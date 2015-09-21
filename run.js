@@ -33,4 +33,11 @@ function eatToken(token) {
 	span.className = 'token';
 	span.textContent = token.data;
 	glsl_container.appendChild(span);
+
+	// token === '\n'
+	if (token.data.match(/\n+/g)) {
+		span.textContent = token.data.replace(/\n/g, '↵');
+		console.log('new line')
+		glsl_container.appendChild(document.createElement('br'));
+	}
 }

@@ -22,6 +22,9 @@ attribute vec2 uv;
 #ifdef USE_COLOR
 	attribute vec3 color;
 #endif
+
+
+
 #ifdef USE_MORPHTARGETS
 	attribute vec3 morphTarget0;
 	attribute vec3 morphTarget1;
