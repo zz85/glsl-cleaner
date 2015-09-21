@@ -28,6 +28,7 @@ ajax('vs.glsl', function(r) {
 });
 
 var glsl_container;
+var token_to_dom = [];
 
 function startParsing(code) {
 	try {
@@ -49,6 +50,9 @@ function startParsing(code) {
 
 	debug.innerHTML = '';
 
+	tree.innerHTML = '';
+	walker(ast);
+
 }
 
 function tokenHighlighter(tokens) {
@@ -69,4 +73,51 @@ function eatToken(token) {
 		console.log(token);
 		debug.innerHTML = JSON.stringify(token);
 	}
+
+	token_to_dom.push(span);
+}
+
+var level = 0;
+function walker(ast) {
+	level++;
+	tree.appendChild(document.createTextNode(new Array(level).join('|') + '- '));
+
+	var a = document.createElement('a');
+	a.innerHTML = ast.type + '\n';
+	a.href = '#';
+	a.onclick = function() {
+		console.log('hi', ast, ast.token, tokens.indexOf(ast.token));
+
+
+		return false;
+	}
+
+	tree.appendChild(a);
+
+	ast.children.forEach(walker);
+	level--;
+	// stmtlist - has multiple statements/ preprocessor
+	// stmt
+	// struct
+	// function
+	// functionargs
+	// decl
+	// decllist
+	// forloop
+	// whileloop
+	// if
+	// expr
+	// precision
+	// comment
+	// preprocessor
+	// keyword
+	// ident
+	// return
+	// continue
+	// break
+	// discard
+	// do-while
+	// binary
+	// ternary
+	// unary
 }

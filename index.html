@@ -42,6 +42,11 @@ textarea {
 	cursor: text;
 }
 
+#tree {
+	height: 400px;
+	overflow: auto;
+}
+
 .token {
 	box-sizing: border-box;
 	color: #eeeeee;
@@ -106,9 +111,14 @@ textarea {
 	<textarea id="source"></textarea>
 	<script src="b.js"></script>
 	<script src="run.js"></script>
+	Ast:
+	<pre id="tree"></pre>
+
 	<br/>
 	Token Viewer: (click on code to view tokens)
 	<pre id="debug"></pre>
+
+
 
 </body>
 </html>
