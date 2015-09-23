@@ -21,7 +21,8 @@ source.onkeyup = function() {
 	startParsing(source.value);
 };
 
-ajax('vs.glsl', function(r) {
+// shader_submerged.glsl vs.glsl
+ajax('shader_submerged.glsl', function(r) {
 	// console.log('got', r);
 	source.value = r;
 	startParsing(r)
@@ -54,6 +55,13 @@ function startParsing(code) {
 	tree.innerHTML = 'Ast:\n';
 	walker(ast);
 
+	simple_walker(ast, function(node) {
+		TYPE_CHILDREN[node.type] = TYPE_CHILDREN[node.type] || {};
+		node.children.forEach(function(child) {
+			TYPE_CHILDREN[node.type][child.type] = 1;
+		})
+	});
+
 }
 
 function tokenHighlighter(tokens) {
@@ -80,57 +88,79 @@ function eatToken(token) {
 
 var level = 0;
 
+var TYPE_CHILDREN = {};
+
+function simple_walker(ast, onNode) {
+	onNode(ast);
+
+	ast.children.forEach(function(child) {
+		simple_walker(child, onNode);
+	});
+}
+
+
 function walker(ast) {
 	level++;
-	tree.appendChild(document.createTextNode(new Array(level).join('|') + '- '));
 
-	var a = document.createElement('a');
-	a.innerHTML = ast.type + '\n';
-	a.href = '#';
-	a.onclick = function() {
-		var token_index = tokens.indexOf(ast.token);
-		if (token_index > -1) {
-			if (highlighted) highlighted.classList.remove('highlight');
-			highlighted = token_to_dom[token_index];
-			highlighted.classList.add('highlight');
+	if (ast.type !== 'placeholder') {
+		tree.appendChild(document.createTextNode(new Array(level).join('|') + '- '));
 
-			// highlighted.parentNode.scrollTop = (ast.token.line * 12) + 'px';
-			highlighted.scrollIntoView({behavior: "smooth"}); // block: "end",
-		} else {
-			console.log('token not found');
+
+		var a = document.createElement('a');
+		a.innerHTML = ast.type + '\n';
+		a.href = '#';
+		a.onclick = function() {
+			var token_index = tokens.indexOf(ast.token);
+			if (token_index > -1) {
+				if (highlighted) highlighted.classList.remove('highlight');
+				highlighted = token_to_dom[token_index];
+				highlighted.classList.add('highlight');
+
+				// highlighted.parentNode.scrollTop = (ast.token.line * 12) + 'px';
+				highlighted.scrollIntoView({behavior: "smooth"}); // block: "end",
+			} else {
+				console.log('token not found');
+			}
+
+			console.log('ast', ast);
+			return false;
 		}
 
-		console.log('ast', ast);
-		return false;
+		tree.appendChild(a);
 	}
-
-	tree.appendChild(a);
 
 	ast.children.forEach(walker);
 	level--;
 
-	// stmtlist - has multiple statements/ preprocessor
-	// stmt
-	// struct
-	// function
-	// functionargs
-	// decl
-	// decllist
-	// forloop
+	// mknode(mode/type, token, children, id)
+	// for (k in TYPE_CHILDREN) console.log(k, Object.keys(TYPE_CHILDREN[k]))
+
+	// stmtlist - has multiple statements/ preprocessor  ["preprocessor", "stmt"]
+	// stmt - Statement. Has precision, ["decl", "return", "if", "expr", "forloop"]
+	// struct -
+	// function - has (ident, functionargs, stmtlist, )
+	// functionargs - ["decl"]
+	// decl - declaration has ["keyword", "decllist", "function", "placeholder"]
+	// decllist - declaration list. ["ident", "expr"]
+	// forloop ["decl", "expr", "stmt"]
 	// whileloop
-	// if
-	// expr
-	// precision
+	// if ["expr", "stmtlist", "stmt"]
+	// expr - ["literal", "call", "binary", "group", "ident", "assign", "unary", "operator"]
+	// precision - has Keywords
 	// comment
-	// preprocessor
-	// keyword
-	// ident
-	// return
+	// preprocessor - DEFINE, conditional MACROS (Leaf)
+	// keyword. Keyword. (Leaf Node)
+	// ident - Identifier. (Leaf Node)
+	// return - Return (expr)
 	// continue
 	// break
 	// discard
 	// do-while
-	// binary
-	// ternary
-	// unary
+	// binary (binary, call, indent)
+	// ternary -
+	// unary - (call, ident, literal)
+	// call - (keyword, call, literal, unary, builtin, ident, binary, operator)
+
+	// assign - ["ident", "operator", "binary", "call", "unary", "literal"]
+	// placeholder - does nothing.
 }
