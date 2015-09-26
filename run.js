@@ -14,11 +14,11 @@ function ajax(url, callback) {
 var SHOW_LINE_BREAKS = true;
 
 source.onchange = function() {
-	startParsing(source.value);
+	attemptParse();
 };
 
 source.onkeyup = function() {
-	startParsing(source.value);
+	attemptParse();
 };
 
 // shader_submerged.glsl vs.glsl
@@ -40,14 +40,12 @@ function startParsing(code) {
 		if (glsl_container) glsl_container.parentNode.removeChild(glsl_container)
 		glsl_container = document.createElement('pre');
 		glsl_container.id = 'glsl_container';
-		glsl_container.contentEditable = true;
 
-		glsl_container.onkeyup = function() {
-			if (isParsing) {
-				clearTimeout(isParsing);
-			}
-			isParsing = setTimeout(tryParse, 200);
-		}
+		// glsl_container.contentEditable = true;
+
+		// glsl_container.onkeyup = function() {
+
+		// }
 
 		document.body.appendChild(glsl_container);
 
@@ -158,14 +156,19 @@ function walker(ast) {
 
 var isParsing, lastParsed;
 
-document.body.addEventListener('ready', function() {
+function attemptParse() {
+	if (isParsing) {
+		clearTimeout(isParsing);
+	}
+	isParsing = setTimeout(tryParse, 200);
+}
 
-})
 
 function tryParse() {
 	clearTimeout(isParsing);
 
-	var contents = glsl_container.textContent.split('↵').join('');
+	var contents = source.value;
+	// var contents = glsl_container.textContent.split('↵').join('');
 	// no thanks to no unicode reg expr
 	if (contents == lastParsed) return;
 
