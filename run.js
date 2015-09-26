@@ -174,3 +174,10 @@ function walker(ast) {
 	// assign - ["ident", "operator", "binary", "call", "unary", "literal"]
 	// placeholder - does nothing.
 }
+
+document.body.addEventListener('ready', function() {
+	glsl_container.contentEditable = true
+	z = 0;
+	glsl_container.onkeyup = function(y) { console.log('up', y ); glsl_container.innerHTML += (z++) }
+})
+
