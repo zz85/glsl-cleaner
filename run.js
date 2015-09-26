@@ -80,7 +80,7 @@ function eatToken(token) {
 
 	span.onclick = function() {
 		console.log(token);
-		debug.innerHTML = JSON.stringify(token);
+		hightlightToken(token);
 	}
 
 	token_to_dom.push(span);
@@ -99,6 +99,25 @@ function simple_walker(ast, onNode) {
 }
 
 
+function hightlightToken(token) {
+	var token_index = tokens.indexOf(token);
+	if (token_index > -1) {
+		if (highlighted) highlighted.classList.remove('highlight');
+		highlighted = token_to_dom[token_index];
+		highlighted.classList.add('highlight');
+
+		highlighted.scrollIntoView();
+
+		// highlighted.parentNode.scrollTop = (ast.token.line * 12) + 'px';
+		// highlighted.scrollIntoView({behavior: "smooth"}); // block: "end",
+	} else {
+		console.log('token not found');
+	}
+
+	debug.innerHTML = JSON.stringify(token);
+}
+
+
 function walker(ast) {
 	level++;
 
@@ -107,26 +126,17 @@ function walker(ast) {
 
 
 		var a = document.createElement('a');
-		a.innerHTML = ast.type + '\n';
+		a.innerHTML = ast.type;
 		a.href = '#';
 		a.onclick = function() {
-			var token_index = tokens.indexOf(ast.token);
-			if (token_index > -1) {
-				if (highlighted) highlighted.classList.remove('highlight');
-				highlighted = token_to_dom[token_index];
-				highlighted.classList.add('highlight');
-
-				// highlighted.parentNode.scrollTop = (ast.token.line * 12) + 'px';
-				highlighted.scrollIntoView({behavior: "smooth"}); // block: "end",
-			} else {
-				console.log('token not found');
-			}
-
+			hightlightToken(ast.token);
 			console.log('ast', ast);
 			return false;
 		}
 
 		tree.appendChild(a);
+
+		tree.appendChild(document.createTextNode(' ' + (ast.token ? ast.token.data : '') + '\n'));
 	}
 
 	ast.children.forEach(walker);
