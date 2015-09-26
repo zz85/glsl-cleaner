@@ -1,3 +1,35 @@
+# References
+
+- https://www.khronos.org/files/opengles_shading_language.pdf
+- https://github.com/stackgl/glsl-tokenizer
+- https://github.com/stackgl/glsl-parser
+- https://github.com/burg/glsl-simulator/blob/master/lib/compiler/ast.js
+
+## Tokens
+
+- keyword
+- identifier
+- integer-constant
+- floating-constant
+- operator
+
+
+## Comments
+/* and */, or by // and a new-lin
+
+
+## Preprocessor
+
+## Variables and Types
+	all variable functions -> must declare type
+	type-safe, no implict conversion
+	structs allowed
+
+	basic_types = [
+
+	]
+
+
 ## GLSL parser types
 
 stmtlist - has multiple statements/ preprocessor  ["preprocessor", "stmt"]

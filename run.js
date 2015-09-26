@@ -40,6 +40,15 @@ function startParsing(code) {
 		if (glsl_container) glsl_container.parentNode.removeChild(glsl_container)
 		glsl_container = document.createElement('pre');
 		glsl_container.id = 'glsl_container';
+		glsl_container.contentEditable = true;
+
+		glsl_container.onkeyup = function() {
+			if (isParsing) {
+				clearTimeout(isParsing);
+			}
+			isParsing = setTimeout(tryParse, 200);
+		}
+
 		document.body.appendChild(glsl_container);
 
 		tokenHighlighter(tokens);
@@ -142,15 +151,24 @@ function walker(ast) {
 	ast.children.forEach(walker);
 	level--;
 
-	// all variable functions -> must declare type
-
-
 	// mknode(mode/type, token, children, id)
 	// for (k in TYPE_CHILDREN) console.log(k, Object.keys(TYPE_CHILDREN[k]))
 }
 
+
+var isParsing, lastParsed;
+
 document.body.addEventListener('ready', function() {
-	glsl_container.contentEditable = true
-	z = 0;
-	glsl_container.onkeyup = function(y) { console.log('up', y ); glsl_container.innerHTML += (z++) }
+
 })
+
+function tryParse() {
+	clearTimeout(isParsing);
+
+	var contents = glsl_container.textContent.split('↵').join('');
+	// no thanks to no unicode reg expr
+	if (contents == lastParsed) return;
+
+	startParsing(contents);
+	lastParsed = contents;
+}
