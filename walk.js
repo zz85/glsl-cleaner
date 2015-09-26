@@ -8,6 +8,14 @@ function simple_walker(ast, onNode) {
 	});
 }
 
+function walk_into(ast, type, onNode) {
+	simple_walker(ast, function(node) {
+		if (node.type === type) { // stmtlist
+			onNode(node);
+		}
+	});
+}
+
 function lint(ast, passes) {
 	var warnings = []; // or pass reporter
 	passes.forEach(function(pass) {
@@ -18,10 +26,8 @@ function lint(ast, passes) {
 }
 
 function lint_all(ast) {
-	return lint(ast, [check_unused]);
+	return lint(ast, [unused_variables]);
 }
-
-// lint(ast, [check_unused]);
 
 /*
 
@@ -36,16 +42,31 @@ void test(float g, float h) {
 }
 */
 
-function check_unused(ast) {
-	simple_walker(ast, function(node) {
-		if (node.type === 'function') {
-			console.log('function!');
-		}
+function unused_variables(ast, global_declared) {
+	var declared_list = {};
 
-		if (node.type === 'decl') { // stmtlist
-			console.log('decl!');
+	function checkNode(node) {
+		if (node.type === 'decllist') { // stmtlist
+			walk_into(node, 'ident', function(node) {
+				declared_list[node.data] = 0;
+				console.log('ident!', node.data);
+			});
+		}
+	}
+
+	simple_walker(ast, function(node) {
+		checkNode(node);
+
+		if (node.type === 'function' && !global_declared) {
+			console.log('function!');
+
+			unused_variables(node, declared_list);
+
+			return true; // break walker
 		}
 	});
+
+	console.log('declared variables', Object.keys(declared_list));
 	// decl < decllist
 	// stmt / func / functionargs
 }
