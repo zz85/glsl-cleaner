@@ -117,10 +117,24 @@ textarea {
 	color: #66d9ef;
 }
 
+#debug {
+	color: red;
+}
+
 </style>
 	Editor: (paste or write code here)
-	<textarea id="source"></textarea>
+	<textarea id="source">
+float a;
+float b = 1.;
+float c, d;
+float e = 2., f = 3.;
+
+void test(float g, float h) {
+  float i;
+}
+</textarea>
 	<script src="b.js"></script>
+	<script src="walk.js"></script>
 	<script src="run.js"></script>
 	<pre id="tree"></pre>
 

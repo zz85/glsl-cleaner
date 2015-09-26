@@ -22,11 +22,13 @@ source.onkeyup = function() {
 };
 
 // shader_submerged.glsl vs.glsl
-ajax('shader_submerged.glsl', function(r) {
-	// console.log('got', r);
-	source.value = r;
-	startParsing(r)
-});
+// ajax('shader_submerged.glsl', function(r) {
+// 	// console.log('got', r);
+// 	source.value = r;
+// 	startParsing(r)
+// });
+
+setTimeout(attemptParse, 100);
 
 var glsl_container;
 var token_to_dom = [];
@@ -62,13 +64,22 @@ function startParsing(code) {
 	tree.innerHTML = 'Ast:\n';
 	walker(ast);
 
+
+	/*
+	// check children types
+	var TYPE_CHILDREN = {};
 	simple_walker(ast, function(node) {
 		TYPE_CHILDREN[node.type] = TYPE_CHILDREN[node.type] || {};
 		node.children.forEach(function(child) {
 			TYPE_CHILDREN[node.type][child.type] = 1;
 		})
 	});
+	for (k in TYPE_CHILDREN) console.log(k, Object.keys(TYPE_CHILDREN[k]))
+	*/
 
+	console.time('lint');
+	lint_all(ast);
+	console.timeEnd('lint');
 }
 
 function tokenHighlighter(tokens) {
@@ -94,17 +105,6 @@ function eatToken(token) {
 }
 
 var level = 0;
-
-var TYPE_CHILDREN = {};
-
-function simple_walker(ast, onNode) {
-	onNode(ast);
-
-	ast.children.forEach(function(child) {
-		simple_walker(child, onNode);
-	});
-}
-
 
 function hightlightToken(token) {
 	var token_index = tokens.indexOf(token);
@@ -150,7 +150,6 @@ function walker(ast) {
 	level--;
 
 	// mknode(mode/type, token, children, id)
-	// for (k in TYPE_CHILDREN) console.log(k, Object.keys(TYPE_CHILDREN[k]))
 }
 
 
