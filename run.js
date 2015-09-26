@@ -142,37 +142,11 @@ function walker(ast) {
 	ast.children.forEach(walker);
 	level--;
 
+	// all variable functions -> must declare type
+
+
 	// mknode(mode/type, token, children, id)
 	// for (k in TYPE_CHILDREN) console.log(k, Object.keys(TYPE_CHILDREN[k]))
-
-	// stmtlist - has multiple statements/ preprocessor  ["preprocessor", "stmt"]
-	// stmt - Statement. Has precision, ["decl", "return", "if", "expr", "forloop"]
-	// struct -
-	// function - has (ident, functionargs, stmtlist, )
-	// functionargs - ["decl"]
-	// decl - declaration has ["keyword", "decllist", "function", "placeholder"]
-	// decllist - declaration list. ["ident", "expr"]
-	// forloop ["decl", "expr", "stmt"]
-	// whileloop
-	// if ["expr", "stmtlist", "stmt"]
-	// expr - ["literal", "call", "binary", "group", "ident", "assign", "unary", "operator"]
-	// precision - has Keywords
-	// comment
-	// preprocessor - DEFINE, conditional MACROS (Leaf)
-	// keyword. Keyword. (Leaf Node)
-	// ident - Identifier. (Leaf Node)
-	// return - Return (expr)
-	// continue
-	// break
-	// discard
-	// do-while
-	// binary (binary, call, indent)
-	// ternary -
-	// unary - (call, ident, literal)
-	// call - (keyword, call, literal, unary, builtin, ident, binary, operator)
-
-	// assign - ["ident", "operator", "binary", "call", "unary", "literal"]
-	// placeholder - does nothing.
 }
 
 document.body.addEventListener('ready', function() {
@@ -180,4 +154,3 @@ document.body.addEventListener('ready', function() {
 	z = 0;
 	glsl_container.onkeyup = function(y) { console.log('up', y ); glsl_container.innerHTML += (z++) }
 })
-
