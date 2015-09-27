@@ -78,7 +78,8 @@ function startParsing(code) {
 	*/
 
 	console.time('lint');
-	lint_all(ast);
+	var reports = lint_all(ast);
+	debug.innerHTML = reports.join('\n');
 	console.timeEnd('lint');
 }
 

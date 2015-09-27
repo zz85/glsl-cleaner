@@ -15,6 +15,7 @@ function Reporter() {
 }
 
 Reporter.prototype.report = function(message, details) {
-	console.log('Warning on ' + details.token.line + ':' + details.token.column, '-', message);
-	this.reports.push(message);
+	var msg = 'Warning on ' + details.token.line + ':' + details.token.column + ' - ' + message;
+	console.log(msg);
+	this.reports.push(msg);
 };
