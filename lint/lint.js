@@ -1,3 +1,5 @@
+'use strict';
+
 function lint(ast, passes) {
 	var reporter = new Reporter();
 	passes.forEach(function(pass) {

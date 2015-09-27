@@ -1,6 +1,6 @@
 /*
 
-Exports unused_variables
+Exports: unused_variables
 
 
 float a;
@@ -13,14 +13,12 @@ void test(float g, float h) {
 }
 */
 
+var exceptions = ['main'];
+
 function unused_variables(ast, reporter, global_declared) {
 	// exception - varying depends on in vs / fs.
 	var declared_list = {}; // symbol table
 	var warnings = [];
-
-	function checkNode(node) {
-
-	}
 
 	simple_walker(ast, function(node) {
 		if (node.type === 'decllist') {
@@ -31,7 +29,6 @@ function unused_variables(ast, reporter, global_declared) {
 					token: node.token,
 					calls: 0
 				};
-				// console.log('ident!', node.data);
 			});
 
 			return;
@@ -59,10 +56,14 @@ function unused_variables(ast, reporter, global_declared) {
 					global_declared[node.data].calls++;
 				}
 				else {
+					// TODO: add exceptions?
+
 					// warn that variable has not been declared!
-					console.warn('Not found!!', node.data);
+					if (exceptions.indexOf(node.data) === -1)
+						console.warn('Variable not found!', node.data);
+
+
 				}
-				// console.log('expr ident!', node.data);
 			});
 
 			return;
@@ -81,7 +82,7 @@ function unused_variables(ast, reporter, global_declared) {
 
 	for (var variable in declared_list) {
 		var symbol = declared_list[variable];
-		if (!symbol.calls) {
+		if (!symbol.calls && exceptions.indexOf(variable) === -1) {
 			var msg = symbol.type + ' [' + symbol.name + '] is not used';
 			reporter.report(msg, symbol);
 		}

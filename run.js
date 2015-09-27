@@ -1,3 +1,5 @@
+'use strict';
+
 function ajax(url, callback) {
 	var oReq = new XMLHttpRequest();
 	oReq.open('GET', url, true);
@@ -22,17 +24,17 @@ source.onkeyup = function() {
 };
 
 // shader_submerged.glsl vs.glsl
-// ajax('shader_submerged.glsl', function(r) {
-// 	// console.log('got', r);
-// 	source.value = r;
-// 	startParsing(r)
-// });
+ajax('shader_submerged.glsl', function(r) {
+	// console.log('got', r);
+	source.value = r;
+	startParsing(r)
+});
 
 setTimeout(attemptParse, 100);
 
 var glsl_container;
 var token_to_dom = [];
-var highlighted;
+var highlighted, tokens, ast;
 
 function startParsing(code) {
 	try {
@@ -100,7 +102,7 @@ function tokenHighlighter(tokens) {
 }
 
 function eatToken(token) {
-	span = document.createElement('span');
+	var span = document.createElement('span');
 	span.className = 'token ' + token.type;
 	span.textContent = token.data;
 	glsl_container.appendChild(span);

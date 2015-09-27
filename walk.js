@@ -1,5 +1,6 @@
-// walker which executes a callback on every node.
+'use strict';
 
+// walker which executes a callback on every node.
 function simple_walker(ast, onNode) {
 	if (onNode(ast)) return;
 

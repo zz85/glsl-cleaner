@@ -30,3 +30,9 @@ Add a github issue/PR, or find me on [twitter](https://twitter.com/blurspline)
 - more lint passes
   - check type safety
   - check declared variables get assigned
+  - check for redefinations
+- mangle AST
+  - for shorter variable names
+  - remove dead paths
+- make Tree explorer interactive
+- write unit tests
