@@ -15,7 +15,7 @@ void test(float g, float h) {
 
 function unused_variables(ast, reporter, global_declared) {
 	// exception - varying depends on in vs / fs.
-	var declared_list = {};
+	var declared_list = {}; // symbol table
 	var warnings = [];
 
 	function checkNode(node) {
@@ -26,12 +26,26 @@ function unused_variables(ast, reporter, global_declared) {
 		if (node.type === 'decllist') {
 			walk_into(node, 'ident', function(node) {
 				declared_list[node.data] = {
+					type: 'variable',
 					name: node.data,
 					token: node.token,
 					calls: 0
 				};
 				// console.log('ident!', node.data);
 			});
+
+			return;
+		}
+
+		if (node.type === 'function') {
+			var functionNode = node.children[0];
+
+			declared_list[functionNode.data] = {
+				type: 'function', // technically a function variable
+				name: functionNode.data,
+				token: functionNode.token,
+				calls: 0
+			};
 
 			return;
 		}
@@ -46,7 +60,7 @@ function unused_variables(ast, reporter, global_declared) {
 				}
 				else {
 					// warn that variable has not been declared!
-					// console.log('Not found!!', node.data);
+					console.warn('Not found!!', node.data);
 				}
 				// console.log('expr ident!', node.data);
 			});
@@ -68,7 +82,7 @@ function unused_variables(ast, reporter, global_declared) {
 	for (var variable in declared_list) {
 		var symbol = declared_list[variable];
 		if (!symbol.calls) {
-			var msg = 'variable [' + symbol.name + '] is not used';
+			var msg = symbol.type + ' [' + symbol.name + '] is not used';
 			reporter.report(msg, symbol);
 		}
 	}

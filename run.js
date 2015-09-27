@@ -84,7 +84,7 @@ function startParsing(code) {
 		var a = document.createElement('a');
 		a.className = 'errorlink';
 		a.onclick = function() {
-			console.log(r.details.token);
+			// console.log(r.details.token);
 			hightlightToken(r.details.token, true);
 			return false;
 		}
