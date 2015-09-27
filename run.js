@@ -79,7 +79,19 @@ function startParsing(code) {
 
 	console.time('lint');
 	var reports = lint_all(ast);
-	debug.innerHTML = reports.join('\n');
+
+	reports.forEach(function(r) {
+		var a = document.createElement('a');
+		a.className = 'errorlink';
+		a.onclick = function() {
+			console.log(r.details.token);
+			hightlightToken(r.details.token, true);
+			return false;
+		}
+		a.innerHTML = 'Warning on ' + r.details.token.line + ':' + r.details.token.column + ' - ' + r.message + '\n';
+
+		debug.appendChild(a);
+	})
 	console.timeEnd('lint');
 }
 
@@ -107,7 +119,7 @@ function eatToken(token) {
 
 var level = 0;
 
-function hightlightToken(token) {
+function hightlightToken(token, hide) {
 	var token_index = tokens.indexOf(token);
 	if (token_index > -1) {
 		if (highlighted) highlighted.classList.remove('highlight');
@@ -122,7 +134,7 @@ function hightlightToken(token) {
 		console.log('token not found');
 	}
 
-	debug.innerHTML = JSON.stringify(token);
+	if (!hide) debug.innerHTML = JSON.stringify(token);
 }
 
 
